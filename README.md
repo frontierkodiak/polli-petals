@@ -38,6 +38,8 @@ We provide Petals models in PyTorch format. Select models will also available as
 
 Contact us if you need a model in a specific format and can't wait for Polli Engine.
 
+Sample code for loading and using Petals models in PyTorch coming soon! Hierarchical/context models need particular code for tokenization & postprocessing, so we'll provide examples for those as well.
+
 ### Taxonomic predictions
 
 We use iNaturalist's taxonID encodings. TaxonIDs are unique identifiers for each taxon in the iNaturalist taxonomy. You can find the iNaturalist taxonID for a given taxon by searching for it on the [iNaturalist website](https://www.inaturalist.org/).
