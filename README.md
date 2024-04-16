@@ -40,14 +40,27 @@ Contact us if you need a model in a specific format and can't wait for Polli Eng
 
 Sample code for loading and using Petals models in PyTorch coming soon! Hierarchical/context models need particular code for tokenization & postprocessing, so we'll provide examples for those as well.
 
+
+### Model metadata
+
+Model metadata is stored in each model's release folder. Metadata is stored in different files depending on the model type, we're working on standardizing this.
+
+All models include the following metadata:
+- `taxonID`: iNaturalist taxonID of the model's root taxon
+- `taxon`: common name of the model's root taxon
+- 'levels': taxonomic levels (>1 for hierarchical models) for which the model provides predictions
+- 'taxa': list of taxonIDs for which the model provides predictions (coming soon)
+
+
 ### Taxonomic predictions
 
 We use iNaturalist's taxonID encodings. TaxonIDs are unique identifiers for each taxon in the iNaturalist taxonomy. You can find the iNaturalist taxonID for a given taxon by searching for it on the [iNaturalist website](https://www.inaturalist.org/).
 
 We provide a sqlite database with the iNaturalist taxa name:taxonID mappings for all of primary taxonomic levels (kingdom, phylum, class, order, family, genus, species). This database is available in the `taxonomy` directory of this repository. Instructions & sample code for using this database coming soon! Polli Engine will automatically handle taxonID -> taxon name lookups for you.
 
+# Classifiers
 
-## Hierarchical vs. Single-level models
+## Hierarchical vs. Single-level classifiers
 Both single-level and hierarchical classifiers are available via Petals. Single-level classifiers return predictions for a single taxonomic level (ex. genus, species), while hierarchical classifiers return predictions for all levels in the taxonomic hierarchy below that model's root taxon. 
 
 Hierarchical classifiers can be useful for suppressing false positives and sanity-checking the model's predictions. There are a lot of creative things you can do with these models, so we encourage you to experiment! 🙂
@@ -63,6 +76,18 @@ Petals MobileOne models are trained with an in-house [MMPretrain](https://github
 Vision + context Petals models are based on a custom fork of the [Metaformer](https://arxiv.org/abs/2111.11418) mixed-token transformer. These models take into account both visual and spatiotemporal context to make more informed predictions. Vision + context models are larger and slower than vision-only models, but they are more accurate and can provide more detailed information about the input. We currently release models based on the MetaFG_0 (sm), MetaFG_1 (md), and MetaFG_2 (lg) architectures.
 
 Vision + context models are currently only available as single-level models. Hierarchical vision + context releases are planned for later this year. [Polli Bouquet](https://polli.ai/software) employs a SOTA in-house mixed-token transformer architecture. Lagging versions are likely to be open-sourced in the future.
+
+## Routers
+
+Routing models are high-level classifiers used to select the best Petals model for a given input. We are not currently planning to release dedicated router models before Polli Engine is available, but we may consider releasing some upon request.
+
+Routers are unnecessary when feeding hierarchical classifiers with Polli Detector models. We recommend using this approach for most applications.
+
+# Detectors
+
+Petals Detectors are object detection models, used to feed downstream classifiers. Some detectors also provide instance segmentations (tight masks around the specimen) to occlude background features. Detectors are not currently provided as a part of Polli Petals, but we plan to release some later this year.
+
+Polli Engine will allow you to pass raw images and handle pipelining in the background.
 
 # Model availability
 
