@@ -21,11 +21,15 @@ Please contact us if you are interested in contributing data, especially for und
 
 # Model details
 
+Unless otherwise specified, all models:
+- Take static 224x224px image inputs.
+- Were trained from scratch (no pretrained backbone/checkpoint).
+
 Versioning:
 - Taxa: Root clade of the model
 - Region: Geographic region of the model
 - Context: Whether the model includes context information
-- Size: Size class of the model (xs, sm, md, lg, xl). See model details for schema specifics.
+- Size: Parameter count.
 - Quantization: Quantization level of the model (int8, fp16). If not specified, the model is in fp32.
 - Major version: changes to the model architecture or training pipeline
 - Minor version: changes to the model weights or hyperparameters
@@ -33,8 +37,10 @@ Versioning:
 
 ex. `liliopsida.usa-l48.context.md.v1.0.0.pth`
 
+Note that parameter count is an imperfect measure of inference costs. In practice, other factors (e.g. memory access costs) are more common bottlenecks. We will eventually provide standardized VRAM/latency benchmarks for common target platforms.
+
 ## Using Petals models
-We provide Petals models in PyTorch format. Select models will also available as `.onnx` files with MMDeploy conversion configs, or occassionally in other platform-specific formats. [Polli Engine](https://polli.ai/software) deployment (coming soon) will abstract this away by automatically detecting & pulling the best model format for your target platform.
+We provide Petals models in PyTorch format. Select models will also available as `.onnx` files with MMDeploy conversion configs, or occassionally in other platform-specific formats (e.g. CoreML, TensorRT). [Polli Engine](https://polli.ai/software) deployment (coming soon) will abstract this away by automatically detecting & pulling the best model format for your target platform.
 
 Contact us if you need a model in a specific format and can't wait for Polli Engine.
 
@@ -67,13 +73,13 @@ Hierarchical classifiers can be useful for suppressing false positives and sanit
 
 ## Vision-only models
 
-Vision-only Petals models are based on Apple's [MobileOne](https://machinelearning.apple.com/research/mobileone) architecture and are designed to be particularly lightweight. Most models target the S2 (xs), S3 (sm), or S4 (md) size classes, which can be executed in <2ms on an iPhone 12. Some taxa are also available in our custom S5 (lg) size class.
+Vision-only Petals models are based on Apple's [MobileOne](https://machinelearning.apple.com/research/mobileone) architecture and are designed to be particularly lightweight. Most models target the S2 (8M), S3 (10M), or S4 (15M) size classes, which can be executed in <2ms on an iPhone 12. Some taxa are also available in our custom S5 (30M) size class.
 
-Petals MobileOne models are trained with an in-house [MMPretrain](https://github.com/open-mmlab/mmpretrain/tree/main) fork.
+Petals MobileOne models are trained with an in-house [MMPretrain](https://github.com/open-mmlab/mmpretrain/tree/main) fork. We do not yet have efficient (training) implementations of S0 (2M) and S1 (5M), although these may be provided in the future.
 
 ## Vision + context models
 
-Vision + context Petals models are based on a custom fork of the [Metaformer](https://arxiv.org/abs/2111.11418) mixed-token transformer. These models take into account both visual and spatiotemporal context to make more informed predictions. Vision + context models are larger and slower than vision-only models, but they are more accurate and can provide more detailed information about the input. We currently release models based on the MetaFG_0 (sm), MetaFG_1 (md), and MetaFG_2 (lg) architectures.
+Vision + context Petals models are based on a custom fork of the [Metaformer](https://arxiv.org/abs/2111.11418) mixed-token transformer. These models take into account both visual and spatiotemporal context to make more informed predictions. Vision + context models are larger and slower than vision-only models, but they are more accurate and can provide more detailed information about the input. We currently release models based on the MetaFG_0 (28M), MetaFG_1 (45M), and MetaFG_2 (81M) architectures.
 
 Vision + context models are currently only available as single-level models. Hierarchical vision + context releases are planned for later this year. [Polli Bouquet](https://polli.ai/software) employs a SOTA in-house mixed-token transformer architecture. Lagging versions are likely to be open-sourced in the future.
 
@@ -159,4 +165,11 @@ We plan to extend the availability of Polli Petals to additional regions across 
 - South America
 - Africa
 
-Please contact us if you are interested in supporting the development of our regional models. We are particularly interested in collaborating with local organizations and researchers to improve the quality of our models.
+*Please contact us if you are interested in supporting the development of our regional models. We are particularly interested in collaborating with local organizations and researchers to improve the quality of our models.*
+
+## Tech roadmap
+- Higher-res (>224px) & dynamic classifiers.
+- Hierarchical vision + context (mixed-token) releases.
+- Taxonomic generalists.
+- Some dataset & pretraining tricks from Bouquet.
+- New mixed-token vision transformer arch.
