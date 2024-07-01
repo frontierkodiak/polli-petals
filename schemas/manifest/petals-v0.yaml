@@ -1,0 +1,39 @@
+version: petals-v0
+
+model:
+  name: petal.hClass.USA.aves.preview.xs.v0.0
+  family: petal.hClass.preview
+  type: hierarchical_classifier
+  framework:
+    family: mmdeploy
+    variant: mmpretrain
+    version: 1.0.3
+  architecture:
+    family: mobileone
+    variant: s2
+
+taxonomy:
+  root_taxon_id: 3
+  root_rank_level: 50
+  output_rank_levels: [10, 20, 30, 40]
+
+input:
+  dims:
+    min: [1, 3, 224, 224]
+    opt: [1, 3, 224, 224]
+    max: [1, 3, 224, 224]
+  meta_available: false
+
+output:
+  schema: polli_v0
+  format: json
+
+providers:
+  engine:
+    docker_image: frontierkodiak/mmpre:1.0.3
+  endpoint:
+    docker_image: frontierkodiak/mmpre-serve-1.x:latest
+
+metadata:
+  region: USA
+  clade: aves
